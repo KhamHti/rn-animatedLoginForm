@@ -6,6 +6,7 @@ import {
   View,
   StyleSheet,
   TextInput,
+  Pressable,
 } from "react-native";
 import { Svg, Image, ClipPath, Ellipse } from "react-native-svg";
 import Animated, {
@@ -15,6 +16,8 @@ import Animated, {
   withTiming,
   withDelay,
   runOnJS,
+  withSpring,
+  withSequence,
 } from "react-native-reanimated";
 
 import styles from "./styles";
@@ -28,6 +31,7 @@ export default function App() {
   const { width, height } = Dimensions.get("window");
 
   const imagePosition = useSharedValue(1);
+  const formButtonScale = useSharedValue(1);
 
   const imageAnimatedStyled = useAnimatedStyle(() => {
     const interpolation = interpolate(
@@ -66,8 +70,14 @@ export default function App() {
     return {
       opacity:
         imagePosition.value === 0
-          ? withDelay(400, withTiming(1, { duration: 800 }))
+          ? withDelay(500, withTiming(1, { duration: 800 }))
           : withTiming(0, { duration: 300 }),
+    };
+  });
+
+  const formButtonStyled = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: formButtonScale.value }],
     };
   });
 
@@ -108,7 +118,7 @@ export default function App() {
           </TouchableOpacity>
         </Animated.View>
       </Animated.View>
-      <View style={styles.secContainer}>
+      <Animated.View style={styles.secContainer}>
         <Animated.View style={buttonAnimatedStyled}>
           <TouchableOpacity style={styles.button} onPress={loginHandler}>
             <Text style={styles.buttonText}>Log In</Text>
@@ -137,13 +147,22 @@ export default function App() {
             placeholderTextColor="#B99B6B"
             style={styles.textInput}
           />
-          <TouchableOpacity style={styles.formButton}>
-            <Text style={styles.buttonText}>
-              {isRegister ? "Register" : "Log In"}
-            </Text>
-          </TouchableOpacity>
+          <Animated.View style={[styles.formButton, formButtonStyled]}>
+            <Pressable
+              onPress={() =>
+                (formButtonScale.value = withSequence(
+                  withSpring(1.5),
+                  withSpring(1)
+                ))
+              }
+            >
+              <Text style={styles.buttonText}>
+                {isRegister ? "Register" : "Log In"}
+              </Text>
+            </Pressable>
+          </Animated.View>
         </Animated.View>
-      </View>
+      </Animated.View>
     </Animated.View>
   );
 }
