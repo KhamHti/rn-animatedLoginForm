@@ -118,17 +118,20 @@ export default function App() {
           </TouchableOpacity>
         </Animated.View>
       </Animated.View>
+
       <Animated.View style={styles.secContainer}>
         <Animated.View style={buttonAnimatedStyled}>
           <TouchableOpacity style={styles.button} onPress={loginHandler}>
             <Text style={styles.buttonText}>Log In</Text>
           </TouchableOpacity>
         </Animated.View>
+
         <Animated.View style={buttonAnimatedStyled}>
           <TouchableOpacity style={styles.button} onPress={registerHandler}>
             <Text style={styles.buttonText}>Register</Text>
           </TouchableOpacity>
         </Animated.View>
+
         <Animated.View style={[styles.inputForm, formAnimatedStyled]}>
           <TextInput
             placeholder="Email :"
